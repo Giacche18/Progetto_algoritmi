@@ -111,9 +111,6 @@ int main(int argc, char *argv[])
 			case 3:
 				Rimozione_veicolo(array_veicoli, &numero_veicoli);
 				
-				printf("\nElenco dei veicoli aggiornato come segue dopo la rimozione...\n\n");
-				
-				Stampa_array(array_veicoli, numero_veicoli);
 				Scrivi_su_file(array_veicoli, numero_veicoli, nome_file);
 				break;
 			case 4:
@@ -582,6 +579,14 @@ void Rimozione_veicolo(veicolo *array_veicoli, int *numero_veicoli)
 		array_veicoli = (veicolo*)realloc(array_veicoli, sizeof(veicolo) * dim);
 				
 		*numero_veicoli = dim;
+		
+		printf("\nElenco dei veicoli aggiornato come segue dopo la rimozione...\n\n");
+				
+		Stampa_array(array_veicoli, *numero_veicoli);
+	}
+	else if(posizione_veicolo_eliminare == -1)
+	{
+		printf("\nVeicolo non trovato in memoria\n");
 	}
 }
 
