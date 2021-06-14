@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct
 {
@@ -32,9 +33,9 @@ int main(int argc, char *argv[])
 	
 	int numero_veicoli = 0,
 	    numero_veicoli_inseriti = 0,
-		valore_controllo_menu = 0,
-		valore_controllo_scanf = 0,
-		posizione_valore_ricercato = 0;	
+      	    valore_controllo_menu = 0,
+	    valore_controllo_scanf = 0,
+	    posizione_valore_ricercato = 0;	
 		
 	char nome_file[30];
 	
@@ -78,11 +79,11 @@ int main(int argc, char *argv[])
 		{
 			case 1:
 				printf("\nQuanti veicoli vuoi inserire? ");
-				scanf("%d", &numero_veicoli_inseriti);
+				valore_controllo_scanf = scanf("%d", &numero_veicoli_inseriti);
 				
 				LiberaBuffer();
 				
-				if(numero_veicoli_inseriti <= 0)
+				if(numero_veicoli_inseriti <= 0 || valore_controllo_scanf == 0)
 				{
 					printf("\nErrore! Il numero di veicoli deve corrispondere ad un valore positivo e diverso da 0!\n");
 				}
@@ -100,6 +101,12 @@ int main(int argc, char *argv[])
 				break;
 			case 2:
 				posizione_valore_ricercato = Ricerca_veicolo(array_veicoli, numero_veicoli);
+			
+				if(posizione_valore_ricercato == -1)
+				{
+					printf("\nVeicolo non trovato in memoria\n");
+				} 
+	
 				break;
 			case 3:
 				Rimozione_veicolo(array_veicoli, &numero_veicoli);
@@ -128,74 +135,96 @@ int main(int argc, char *argv[])
 veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 {
 	veicolo tmp_veicolo;
-	char tmp_rigafile[40];
 	veicolo *array_veicoli;
-		
-	FILE *file;
-	int count = 0;
 	
+	char* valore_ritorno_fgets;
+
+	FILE *file;
+	int count = 0,
+	    valore_controllo_scanf = 0,
+	    valore_controllo_fscanf = 0;	
 	do
 	{
 		printf("Digita il nome del file (con estensione) da cui estrappolare i dati: ");
-		scanf("%s", nome_file);
-		
-		file = fopen(nome_file,
-					 "r"); 
-					 
-		if(file != NULL)
-		{	
-			while (fgetc(file) != '\n');
-				
-	 		while(!feof(file))
-			{
-				fscanf(file,
-					   "%s%s\t",
-					   tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);
-				
-				fgets(tmp_veicolo.nome_veicolo,
-					  21,
-				      file);	  
-					  
-				fscanf(file,
-					   "%d\n",
-					   &tmp_veicolo.anno_immatricolazione);
-					    
-				count++;
-			}
-			
-			rewind(file);
-					
-			array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
-			
-			count = 0;
-			
-			while (fgetc(file) != '\n');
-			
-			while(!feof(file))
-			{
-				fscanf(file,
-					   "%s%s\t",
-					   array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
-				
-				fgets(array_veicoli[count].nome_veicolo,
-					  21,
-				      file);	  
-					  
-				fscanf(file,
-					   "%d\n",
-					   &array_veicoli[count].anno_immatricolazione);
-					   
-				count++;
-			} 			
-			
-			fclose(file);
-			
-			*numero_veicoli = count;
+		valore_controllo_scanf = scanf("%s", nome_file);
+	       
+		if(valore_controllo_scanf == 0)
+		{
+			printf("\nErrore!\n");
 		}
 		else
 		{
-			printf("\nErrore in apertura del file! Riprova!\n\n");
-		}
+
+			file = fopen(nome_file,
+				     "r"); 
+						 
+			if(file != NULL)
+			{	
+				while (fgetc(file) != '\n');
+					
+	 			while(!feof(file))
+				{
+					valore_controllo_fscanf = fscanf(file,
+			   		 			         "%s%s\t",
+			  		  		  		 tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);	
+
+					valore_ritorno_fgets = fgets(tmp_veicolo.nome_veicolo,
+					     			     21,
+				    	     			     file);	  
+					if(valore_ritorno_fgets == NULL)
+					{
+						printf("\nErrore!!\n");
+					}
+					else
+					{
+						fscanf(file,
+						       "%d\n",
+					      	       &tmp_veicolo.anno_immatricolazione);
+					    
+						count++;
+					}
+			
+					rewind(file);
+					
+					array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
+			
+					count = 0;
+			
+					while (fgetc(file) != '\n');
+				
+					while(!feof(file))
+					{
+						fscanf(file,
+		  			               "%s%s\t",
+					      	       array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
+				
+						valore_ritorno_gets = fgets(array_veicoli[count].nome_veicolo,
+				             				    21,
+				             				    file);
+				      		if(valore_ritorno_fgets == NULL)
+						{
+							printf("\nErrore!!\n");
+						}
+						else
+						{
+							fscanf(file,
+					      		       "%d\n",
+					      		       &array_veicoli[count].anno_immatricolazione);
+					   
+							count++;
+						} 			
+			
+						fclose(file);
+			
+						*numero_veicoli = count;
+					}
+				}
+			}	
+			else
+			{
+					printf("\nErrore in apertura del file! Riprova!\n\n");
+			}
+		}	
 	}while(file == NULL);
 	
 	return(array_veicoli);
@@ -245,9 +274,7 @@ veicolo* Inserisci_veicolo(veicolo *array_veicoli, int* numero_veicoli, int nume
 	{
 		for(i = *numero_veicoli; i < dim; i++)
 		{
-			array_veicoli[i] = Recupero_dati_veicolo();	
-			
-			LiberaBuffer();
+			array_veicoli[i] = Recupero_dati_veicolo();			
 				
 			printf("\nVeicolo Inserito con successo!\n");
 		}	
@@ -263,151 +290,174 @@ veicolo Recupero_dati_veicolo()
 	veicolo nuovo_veicolo;
 	char tmp_string[7];
 	char tmp_string_nome_veicolo[21];
-	int anno_immatricolazione;
-	int lunghezza_stringa = 0;
-	int valore_controllo = 1;
-	int i;
+	int anno_immatricolazione,
+	    lunghezza_stringa = 0,
+	    valore_controllo = 1,
+	    valore_controllo_scanf = 0,
+            i;
+
+	char* valore_ritorno_fgets;
 	
 	do
 	{
 		printf("\nInserisci il codice del veicolo (formato da 4 lettere maiuscole e 2 numeri)...\n");
-		scanf("%s", tmp_string);
-		
-		if(valore_controllo == 0)
+		valore_controllo_scanf = scanf("%s", tmp_string);
+
+		if(valore_controllo_scanf == 0)
 		{
-			valore_controllo = 1;
+			printf("\nErrore!!\n");
 		}
-		
-		if(strlen(tmp_string) != 6)
-		{
-			printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
-			valore_controllo = 0;
-		}
-		
-		for(i = 0; i < 4 && valore_controllo == 1; i++)
-		{
-			if(!(isupper(tmp_string[i])))
+		else
+		{		
+			if(valore_controllo == 0)
 			{
-				printf("\nValore inserito errato! Le prime 4 cifre del codice cliente devono essere lettere maiuscole! Riprovare!\n\n");
-				valore_controllo = 0;
-			}	
-		}		
+				valore_controllo = 1;
+			}
 		
-		for(i = 4; i < 6 && valore_controllo == 1; i++)
-		{
-			if(!(isdigit(tmp_string[i])))
+			if(strlen(tmp_string) != 6)
 			{
-				printf("\nValore inserito errato! Le ultime 2 cifre del codice cliente devono essere numeri interi e positivi! Riprovare!\n\n");
+				printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
 				valore_controllo = 0;
-			}	
+			}
+		
+			for(i = 0; i < 4 && valore_controllo == 1; i++)
+			{
+				if(!(isupper(tmp_string[i])))
+				{
+					printf("\nValore inserito errato! Le prime 4 cifre del codice cliente devono essere lettere maiuscole! Riprovare!\n\n");
+					valore_controllo = 0;
+				}	
+			}			
+		
+			for(i = 4; i < 6 && valore_controllo == 1; i++)
+			{
+				if(!(isdigit(tmp_string[i])))
+				{
+					printf("\nValore inserito errato! Le ultime 2 cifre del codice cliente devono essere numeri interi e positivi! Riprovare!\n\n");
+					valore_controllo = 0;
+				}	
+			}
 		}
-	}while(valore_controllo == 0);
+	}while(valore_controllo == 0 || valore_controllo_scanf == 0);
 	
 	strcpy(nuovo_veicolo.codice_veicolo, tmp_string);
 	
 	do
 	{
 		printf("Inserisci il codice del proprietario (formato da 3 lettere maiuscole e 3 numeri)...\n");
-		scanf("%s", tmp_string);
+		valore_controllo_scanf = scanf("%s", tmp_string);
 		
-		if(valore_controllo == 0)
+		if(valore_controllo_scanf == 0)
 		{
-			valore_controllo = 1;
+			printf("\nErrore\n");
 		}
-		
-		if(strlen(tmp_string) != 6)
+		else
 		{
-			printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
-			valore_controllo = 0;
-		}
-		
-		for(i = 0; i < 3 && valore_controllo == 1; i++)
-		{
-			if(!(isupper(tmp_string[i])))
+			if(valore_controllo == 0)
 			{
-				printf("\nValore inserito errato! Le prime 3 cifre del codice proprietario devono essere lettere maiuscole! Riprovare!\n\n");
-				valore_controllo = 0;
-			}	
-		}		
+				valore_controllo = 1;
+			}
 		
-		for(i = 3; i < 6 && valore_controllo == 1; i++)
-		{
-			if(!(isdigit(tmp_string[i])))
+			if(strlen(tmp_string) != 6)
 			{
-				printf("\nValore inserito errato! Le ultime 3 cifre del codice proprietario devono essere numeri interi e positivi! Riprovare!\n\n");
+				printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
 				valore_controllo = 0;
 			}
+		
+			for(i = 0; i < 3 && valore_controllo == 1; i++)
+			{
+				if(!(isupper(tmp_string[i])))
+				{
+					printf("\nValore inserito errato! Le prime 3 cifre del codice proprietario devono essere lettere maiuscole! Riprovare!\n\n");
+					valore_controllo = 0;
+				}	
+			}		
+		
+			for(i = 3; i < 6 && valore_controllo == 1; i++)
+			{
+				if(!(isdigit(tmp_string[i])))
+				{
+					printf("\nValore inserito errato! Le ultime 3 cifre del codice proprietario devono essere numeri interi e positivi! Riprovare!\n\n");
+					valore_controllo =  0;
+				}
+			}
 		}
-	}while(valore_controllo == 0);
+	}while(valore_controllo == 0 || valore_controllo_scanf == 0);
 	
 	strcpy(nuovo_veicolo.codice_proprietario, tmp_string);
-	
-	fflush(stdin);
-	
-	do
-	{
-		printf("Inserisci il nome del modello (massimo 20 caratteri)...\n");
-//		gets(tmp_string_nome_veicolo);
-		fgets(tmp_string_nome_veicolo, 20, stdin);
-		
-		if(valore_controllo == 0)
-		{
-			valore_controllo = 1;
-		}
-		
-		lunghezza_stringa = strlen(tmp_string_nome_veicolo);
-		
-		
-		for(i = 0; i < 20; i++)
-		{
-			if(tmp_string_nome_veicolo[i] == '\n')
-			{
-				tmp_string_nome_veicolo[i] = ' ';
-			}
-		}
-
-		for(i = lunghezza_stringa; i < 20; i++)
-		{
-			tmp_string_nome_veicolo[i] = ' ';
-		}
-		
-		tmp_string_nome_veicolo[20] = '\0';
-
-				
-		if(strlen(tmp_string_nome_veicolo) != 20)
-		{
-			printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
-			valore_controllo = 0;
-		}
-		
-	}while(valore_controllo == 0);
-	
-	strcpy(nuovo_veicolo.nome_veicolo, tmp_string_nome_veicolo);
 
 	do
 	{
 		printf("Inserisci l'anno di immatricolazione (massimo 4 numeri)...\n");
-		scanf("%d", &anno_immatricolazione);
+		valore_controllo_scanf = scanf("%d", &anno_immatricolazione);
 		
-		if(valore_controllo == 0)
+		if(valore_controllo_scanf == 0)
 		{
-			valore_controllo = 1;
+			printf("\nErrore!!\n");
 		}
+		else
+		{
+			if(valore_controllo == 0)
+			{
+				valore_controllo = 1;
+			}
 			
-		if(anno_immatricolazione < 0)
-		{
-			printf("\nValore inserito errato! Inserire l'anno di immatricolazione formato da 4 numeri interi e positivi!\n\n");
-			valore_controllo = 0;
-		}
-		
-		if(anno_immatricolazione > 2021)
-		{
-			printf("\nValore inserito errato! Siamo nel 2021!\n\n");
-			valore_controllo = 0;
-		}
-	}while(valore_controllo == 0);
+			if(anno_immatricolazione < 0)
+			{
+				printf("\nValore inserito errato! Inserire l'anno di immatricolazione formato da 4 numeri interi e positivi!\n\n");
+				valore_controllo = 0;
+			}
+			
+			if(anno_immatricolazione > 2021)
+			{
+				printf("\nValore inserito errato! Siamo nel 2021!\n\n");
+				valore_controllo = 0;
+			}
+		}	
+	}while(valore_controllo == 0 || valore_controllo_scanf == 0);
 
 	nuovo_veicolo.anno_immatricolazione = anno_immatricolazione;
+	
+	LiberaBuffer();
+
+	do
+	{
+		printf("Inserisci il nome del modello (massimo 20 caratteri)...\n");
+		valore_ritorno_fgets = fgets(tmp_string_nome_veicolo, 20, stdin);  
+		
+
+		if(valore_controllo == 0)
+		{
+			valore_controllo = 1;			
+		}
+
+		if(valore_ritorno_fgets == NULL)
+		{
+			printf("\nErrore! Riprovare!\n");
+		}
+		else
+		{
+
+			tmp_string_nome_veicolo[20] = '\0'; 
+			
+			if(strlen(tmp_string_nome_veicolo) > 20)
+			{
+				printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare!\n\n");
+				valore_controllo = 0;
+			}
+			else
+			{
+				lunghezza_stringa = strlen(tmp_string_nome_veicolo);
+				
+				for(i = lunghezza_stringa - 1; i < 20; i++)
+				{
+					tmp_string_nome_veicolo[i] = ' ';
+				}
+			}	
+		}	
+	}while(valore_controllo == 0);
+	
+	strcpy(nuovo_veicolo.nome_veicolo, tmp_string_nome_veicolo);
 	
 	return(nuovo_veicolo);
 }
@@ -415,45 +465,54 @@ veicolo Recupero_dati_veicolo()
 int Ricerca_veicolo(veicolo *array_veicoli, int numero_veicoli)
 {
 	char codice_da_ricercare[7];
-	int valore_controllo = 1;
-	int posizione_valore = -1;
-	int risultato_confronto;
-	int i;
+	int valore_controllo = 1,
+	    posizione_valore = -1,
+	    risultato_confronto,
+	    valore_ritorno_scanf = 0,
+	    i;
 		
 	do
 	{
 		printf("\nDigita il codice relativo al veicolo che ti interessa: ");
-		scanf("%s", codice_da_ricercare);
-		
-		LiberaBuffer();
-		
-		if(valore_controllo == 0)
+		valore_ritorno_scanf = scanf("%s", codice_da_ricercare);
+			
+		if(valore_ritorno_scanf == 0)
 		{
-			valore_controllo = 1;
+			printf("\nErrore!!\n");
 		}
-		
-		if(strlen(codice_da_ricercare) != 6)
+		else
 		{
-			printf("\nValore inserito errato! Lunghezza maggiore di quella necessaria! Riprovare!\n\n");
-			valore_controllo = 0;
-		}
+			
+			LiberaBuffer();
 		
-		for(i = 0; i < 4 && valore_controllo == 1; i++)
-		{
-			if(!(isupper(codice_da_ricercare[i])))
+			if(valore_controllo == 0)
 			{
-				printf("\nValore inserito errato! Le prime 4 cifre del codice cliente devono essere lettere maiuscole! Riprovare!\n\n");
-				valore_controllo = 0;
-			}	
-		}		
+				valore_controllo = 1;
+			}
 		
-		for(i = 4; i < 6 && valore_controllo == 1; i++)
-		{
-			if(!(isdigit(codice_da_ricercare[i])))
+			if(strlen(codice_da_ricercare) != 6)
 			{
-				printf("\nValore inserito errato! Le ultime 2 cifre del codice cliente devono essere numeri interi e positivi! Riprovare!\n\n");
+				printf("\nValore inserito errato! Lunghezza maggiore di quella necessaria! Riprovare!\n\n");
 				valore_controllo = 0;
-			}	
+			}
+		
+			for(i = 0; i < 4 && valore_controllo == 1; i++)
+			{
+				if(!(isupper(codice_da_ricercare[i])))
+				{
+					printf("\nValore inserito errato! Le prime 4 cifre del codice cliente devono essere lettere maiuscole! Riprovare!\n\n");
+					valore_controllo = 0;
+				}	
+			}		
+		
+			for(i = 4; i < 6 && valore_controllo == 1; i++)
+			{
+				if(!(isdigit(codice_da_ricercare[i])))
+				{
+					printf("\nValore inserito errato! Le ultime 2 cifre del codice cliente devono essere numeri interi e positivi! Riprovare!\n\n");
+					valore_controllo = 0;
+				}	
+			}
 		}
 	}while(valore_controllo == 0);
 	
@@ -469,19 +528,14 @@ int Ricerca_veicolo(veicolo *array_veicoli, int numero_veicoli)
 		}
 	}
 	
-	if(posizione_valore == -1)
-	{
-		printf("\nVeicolo non trovato in memoria\n");
-	} 
-	
 	return(posizione_valore);
 }
 
 void Rimozione_veicolo(veicolo *array_veicoli, int *numero_veicoli)
 {
 	int posizione_veicolo_eliminare;
-	int dim = (*numero_veicoli);
-	int i;
+	int dim = (*numero_veicoli),
+	    i;
 	
 	posizione_veicolo_eliminare = Ricerca_veicolo(array_veicoli, dim);
 	
@@ -515,7 +569,7 @@ veicolo Ricerca_valore_massimo(veicolo *array_veicoli, int numero_veicoli)
 		else
 		{
 			controllo = strcmp(tmp_veicolo.codice_veicolo, array_veicoli[i].codice_veicolo);
-			if(controllo == -1)
+			if(controllo < 0)
 			{
 				tmp_veicolo = array_veicoli[i];
 			}
@@ -527,10 +581,10 @@ veicolo Ricerca_valore_massimo(veicolo *array_veicoli, int numero_veicoli)
 
 veicolo Ricerca_valore_minimo(veicolo *array_veicoli, int numero_veicoli)
 {
-	int i;
+	int i = 0;
 	int controllo;
 	veicolo tmp_veicolo;
-	
+
 	for(i = 0; i < numero_veicoli; i++)
 	{
 		if(i == 0)
@@ -539,12 +593,14 @@ veicolo Ricerca_valore_minimo(veicolo *array_veicoli, int numero_veicoli)
 		}
 		else
 		{
+		
 			controllo = strcmp(tmp_veicolo.codice_veicolo, array_veicoli[i].codice_veicolo);
-			if(controllo == 1)
+
+			if(controllo > 0)
 			{
-				tmp_veicolo = array_veicoli[i];
+				tmp_veicolo = array_veicoli[i]; 
 			}
-		}
+		} 
 	}
 	
 	return(tmp_veicolo);
