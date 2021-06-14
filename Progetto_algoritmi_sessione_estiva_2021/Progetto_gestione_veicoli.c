@@ -156,7 +156,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 		{
 
 			file = fopen(nome_file,
-				     "r"); 
+				         "r"); 
 						 
 			if(file != NULL)
 			{	
@@ -165,64 +165,91 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 	 			while(!feof(file))
 				{
 					valore_controllo_fscanf = fscanf(file,
-			   		 			         "%s%s\t",
-			  		  		  		 tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);	
-
-					valore_ritorno_fgets = fgets(tmp_veicolo.nome_veicolo,
-					     			     21,
-				    	     			     file);	  
-					if(valore_ritorno_fgets == NULL)
-					{
-						printf("\nErrore!!\n");
+			   		 			         		     "%s%s\t",
+			  		  		  					     tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);	
+			  		if(valore_controllo_fscanf == 0)
+			  		{
+			  			printf("\nErrore!\n");
 					}
 					else
 					{
-						fscanf(file,
-						       "%d\n",
-					      	       &tmp_veicolo.anno_immatricolazione);
-					    
-						count++;
-					}
-			
-					rewind(file);
-					
-					array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
-			
-					count = 0;
-			
-					while (fgetc(file) != '\n');
-				
-					while(!feof(file))
-					{
-						fscanf(file,
-		  			               "%s%s\t",
-					      	       array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
-				
-						valore_ritorno_gets = fgets(array_veicoli[count].nome_veicolo,
-				             				    21,
-				             				    file);
-				      		if(valore_ritorno_fgets == NULL)
+						valore_ritorno_fgets = fgets(tmp_veicolo.nome_veicolo,
+					     			     		 21,
+				    	     			     	 file);	  
+						if(valore_ritorno_fgets == NULL)
 						{
 							printf("\nErrore!!\n");
 						}
 						else
 						{
-							fscanf(file,
-					      		       "%d\n",
-					      		       &array_veicoli[count].anno_immatricolazione);
-					   
-							count++;
-						} 			
+							valore_controllo_fscanf = fscanf(file,
+						           					  "%d\n",
+					   	   	       					  &tmp_veicolo.anno_immatricolazione);
+					   	   	
+					   	   	if(valore_controllo_fscanf == 0)
+					   	   	{
+					   	   		printf("\nErrore!!\n");
+							}
+					    	else
+					    	{
+					    		count++;
+							}			
+						}
+					}	
+				}
+				
+				rewind(file);
+					
+				array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
 			
-						fclose(file);
+				count = 0;
 			
-						*numero_veicoli = count;
+				while (fgetc(file) != '\n');
+							
+				while(!feof(file))
+				{
+					valore_controllo_fscanf = fscanf(file,
+		  			       					  		 "%s%s\t",
+					       							 array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
+					
+					if(valore_controllo_fscanf == 0)
+			  		{
+			  			printf("\nErrore!\n");
+					}
+					else
+					{
+						valore_ritorno_fgets = fgets(array_veicoli[count].nome_veicolo,
+				            	 				 	 21,
+				             				     	 file);
+				      		
+						if(valore_ritorno_fgets == NULL)
+						{
+							printf("\nErrore!!\n");
+						}
+						else
+						{
+							valore_controllo_fscanf = fscanf(file,
+					      	   	   					  "%d\n",
+					     	       					  &array_veicoli[count].anno_immatricolazione);
+					     	
+					     	if(valore_controllo_fscanf == 0)
+					     	{
+					     		printf("\nErrore!!\n");
+							}
+							else
+							{
+								count++;	
+							}				
+						}			
 					}
 				}
-			}	
+				fclose(file);
+			
+				*numero_veicoli = count;
+			}
 			else
 			{
-					printf("\nErrore in apertura del file! Riprova!\n\n");
+				printf("\nErrore in apertura del file! Riprova!\n\n");
 			}
 		}	
 	}while(file == NULL);
@@ -294,7 +321,7 @@ veicolo Recupero_dati_veicolo()
 	    lunghezza_stringa = 0,
 	    valore_controllo = 1,
 	    valore_controllo_scanf = 0,
-            i;
+        i;
 
 	char* valore_ritorno_fgets;
 	
@@ -306,6 +333,7 @@ veicolo Recupero_dati_veicolo()
 		if(valore_controllo_scanf == 0)
 		{
 			printf("\nErrore!!\n");
+			LiberaBuffer();
 		}
 		else
 		{		
@@ -350,6 +378,7 @@ veicolo Recupero_dati_veicolo()
 		if(valore_controllo_scanf == 0)
 		{
 			printf("\nErrore\n");
+			LiberaBuffer();
 		}
 		else
 		{
@@ -394,6 +423,7 @@ veicolo Recupero_dati_veicolo()
 		if(valore_controllo_scanf == 0)
 		{
 			printf("\nErrore!!\n");
+			LiberaBuffer();
 		}
 		else
 		{
@@ -425,7 +455,6 @@ veicolo Recupero_dati_veicolo()
 		printf("Inserisci il nome del modello (massimo 20 caratteri)...\n");
 		valore_ritorno_fgets = fgets(tmp_string_nome_veicolo, 20, stdin);  
 		
-
 		if(valore_controllo == 0)
 		{
 			valore_controllo = 1;			
@@ -458,6 +487,8 @@ veicolo Recupero_dati_veicolo()
 	}while(valore_controllo == 0);
 	
 	strcpy(nuovo_veicolo.nome_veicolo, tmp_string_nome_veicolo);
+	
+	LiberaBuffer();
 	
 	return(nuovo_veicolo);
 }
