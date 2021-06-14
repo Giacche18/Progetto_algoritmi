@@ -1,0 +1,2 @@
+Veicolo	Proprietario	Modello             	Anno
+HFAZ09	COR310			Ford Fiesta         	1949
