@@ -47,8 +47,15 @@ int main(int argc, char *argv[])
 	
 	array_veicoli = Leggi_su_File(nome_file, &numero_veicoli);
 	
-	printf("\n\nLe informazioni sono memorizzate nel modo che segue... \n\n");	
-	Stampa_array(array_veicoli, numero_veicoli);
+	if(array_veicoli->anno_immatricolazione == 0)
+	{
+		printf("\nFile vuoto!\n");
+	}
+	else
+	{
+		printf("\n\nLe informazioni sono memorizzate nel modo che segue... \n\n");	
+		Stampa_array(array_veicoli, numero_veicoli);
+	}
 	
 	printf("\nQuanti veicoli vuoi inserire? ");
 	valore_controllo_scanf = scanf("%d", &numero_veicoli_inseriti);
@@ -517,7 +524,7 @@ veicolo Ricerca_valore_minimo(veicolo *array_veicoli, int numero_veicoli)
 			steps++;
 			controllo = strcmp(tmp_veicolo.codice_veicolo, array_veicoli[i].codice_veicolo);
 			steps++;
-						
+			
 			if(controllo > 1)
 			{
 				steps++;

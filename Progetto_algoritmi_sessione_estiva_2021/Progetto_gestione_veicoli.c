@@ -50,9 +50,16 @@ int main(int argc, char *argv[])
 	
 	array_veicoli = Leggi_su_File(nome_file, &numero_veicoli);
 	
-	printf("\nLe informazioni sono memorizzate nel modo che segue... \n\n");	
-	Stampa_array(array_veicoli, numero_veicoli);
-	
+	if(array_veicoli->anno_immatricolazione == 0)
+	{
+		printf("\nFile vuoto!\n");
+	}
+	else
+	{
+		printf("\nLe informazioni sono memorizzate nel modo che segue... \n\n");	
+		Stampa_array(array_veicoli, numero_veicoli);
+	}
+
 	do
 	{
 		printf("\n[MENU' PER LA GESTIONE DEL PROGRAMMA]\n");
@@ -69,7 +76,7 @@ int main(int argc, char *argv[])
 		valore_controllo_scanf = scanf("%d", &valore_controllo_menu);
 		
 		LiberaBuffer();
-		
+
 		if(valore_controllo_menu > 6 || valore_controllo_menu <= 0 || valore_controllo_scanf == 0)
 		{
 			printf("\nERRORE! IL VALORE DIGITATO NON CORRISPONDE A NESSUNA VOCE DEL MENU' RIPROVARE!\n");
@@ -82,7 +89,7 @@ int main(int argc, char *argv[])
 				valore_controllo_scanf = scanf("%d", &numero_veicoli_inseriti);
 				
 				LiberaBuffer();
-				
+								
 				if(numero_veicoli_inseriti <= 0 || valore_controllo_scanf == 0)
 				{
 					printf("\nErrore! Il numero di veicoli deve corrispondere ad un valore positivo e diverso da 0!\n");
@@ -90,9 +97,7 @@ int main(int argc, char *argv[])
 				else
 				{
 					array_veicoli = Inserisci_veicolo(array_veicoli, &numero_veicoli, numero_veicoli_inseriti);
-					
-					LiberaBuffer();
-					
+			
 					printf("\nElenco dei veicoli aggiornato come segue...\n\n");
 					
 					Stampa_array(array_veicoli, numero_veicoli);
@@ -167,7 +172,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 			  		  		  					     tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);	
 			  		if(valore_controllo_fscanf == 0)
 			  		{
-			  			printf("\nErrore!\n");
+			  			printf("\nErrore in lettura!\n");
 					}
 					else
 					{
@@ -176,7 +181,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 				    	     			     	 file);	  
 						if(valore_ritorno_fgets == NULL)
 						{
-							printf("\nErrore!!\n");
+							printf("\nErrore in lettura!!\n");
 						}
 						else
 						{
@@ -186,7 +191,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 					   	   	
 					   	   	if(valore_controllo_fscanf == 0)
 					   	   	{
-					   	   		printf("\nErrore!!\n");
+					   	   		printf("\nErrore in lettura!\n");
 							}
 					    	else
 					    	{
@@ -212,7 +217,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 					
 					if(valore_controllo_fscanf == 0)
 			  		{
-			  			printf("\nErrore!\n");
+			  			printf("\nErrore in lettura!\n");
 					}
 					else
 					{
@@ -222,7 +227,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 				      		
 						if(valore_ritorno_fgets == NULL)
 						{
-							printf("\nErrore!!\n");
+							printf("\nErrore in lettura!!\n");
 						}
 						else
 						{
@@ -232,7 +237,7 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 					     	
 					     	if(valore_controllo_fscanf == 0)
 					     	{
-					     		printf("\nErrore!!\n");
+					     		printf("\nErrore in lettura!\n");
 							}
 							else
 							{
@@ -420,7 +425,7 @@ veicolo Recupero_dati_veicolo()
 		
 		if(valore_controllo_scanf == 0)
 		{
-			printf("\nErrore!!\n");
+			printf("\nErrore!! Input invalido, riprovare!\n\n");
 			LiberaBuffer();
 		}
 		else
@@ -452,8 +457,7 @@ veicolo Recupero_dati_veicolo()
 	{
 		printf("Inserisci il nome del modello (massimo 20 caratteri)...\n");
 		valore_ritorno_fgets = fgets(tmp_string_nome_veicolo, 20, stdin);  
-		
-//		LiberaBuffer();
+		LiberaBuffer();
 		
 		if(valore_controllo == 0)
 		{
