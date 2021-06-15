@@ -31,19 +31,14 @@ void Stampa_array(veicolo *array_veicoli, int);
 
 int main(int argc, char *argv[]) 
 {
-	int valore_controllo_menu,
-		valore_controllo,
-		posizione_valore_ricercato,
-		numero_veicoli_inseriti,
-		numero_veicoli,
-		posizione_centrale_array,
-		i;
+	int posizione_valore_ricercato,
+	    numero_veicoli_inseriti,
+	    numero_veicoli,
+            posizione_centrale_array;
 		
 	veicolo *array_veicoli = NULL;
 	veicolo valore_massimo;
 	veicolo valore_minimo;
-	
-	double tempo;
 	
 	char nome_file[30];
 
@@ -66,7 +61,6 @@ int main(int argc, char *argv[])
 	else
 	{
 		array_veicoli = Inserisci_veicolo(array_veicoli, &numero_veicoli, numero_veicoli_inseriti);	
-//		Scrivi_su_file(array_veicoli, numero_veicoli, nome_file);
 	
 		posizione_centrale_array = numero_veicoli / 2;
 			
@@ -87,7 +81,6 @@ int main(int argc, char *argv[])
 veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 {
 	veicolo tmp_veicolo;
-	char tmp_rigafile[40];
 	veicolo *array_veicoli;
 		
 	FILE *file;
@@ -231,10 +224,8 @@ veicolo Recupero_dati_veicolo(int* steps)
 {
 	veicolo nuovo_veicolo;
 	char tmp_string[7];
-	char tmp_string_nome_veicolo[21];
 	int anno_immatricolazione;
 	int lunghezza_stringa = 0;
-	int valore_controllo = 1;
 	int i,
 		j;
 		
@@ -305,7 +296,6 @@ veicolo Recupero_dati_veicolo(int* steps)
 	{
 		(*steps)++;
 		printf("\nValore inserito errato! Valore con un formato diverso da quello atteso! Riprovare! Riprovare!\n\n");
-		valore_controllo = 0;
 		(*steps)++;
 	}
 
@@ -323,11 +313,10 @@ veicolo Recupero_dati_veicolo(int* steps)
 
 int Ricerca_veicolo(veicolo *array_veicoli, int numero_veicoli, int posizione_centrale_array)
 {
-	int valore_controllo = 1;
-	int posizione_valore = -1;
-	int risultato_confronto;
-	int i,
-		steps = 0;
+	int posizione_valore = -1,
+	    risultato_confronto,
+	    i,
+	    steps = 0;
 		
 	for(i = 0; i < numero_veicoli; i++)
 	{
@@ -394,10 +383,9 @@ void Rimozione_veicolo(veicolo *array_veicoli, int *numero_veicoli, int posizion
 
 int Ricerca_veicolo_rimuovere(veicolo *array_veicoli, int numero_veicoli, int posizione_centrale_array, int* steps)
 {
-	int valore_controllo = 1;
-	int posizione_valore = -1;
-	int risultato_confronto;
-	int i;
+	int posizione_valore = -1,
+	    risultato_confronto,
+	    i;
 		
 	for(i = 0; i < numero_veicoli; i++)
 	{
@@ -444,7 +432,7 @@ veicolo Ricerca_valore_massimo(veicolo *array_veicoli, int numero_veicoli)
 			controllo = strcmp(tmp_veicolo.codice_veicolo, array_veicoli[i].codice_veicolo);
 			steps++;
 			
-			if(controllo == -1)
+			if(controllo < -1)
 			{
 				steps++;
 				tmp_veicolo = array_veicoli[i];
@@ -480,7 +468,7 @@ veicolo Ricerca_valore_minimo(veicolo *array_veicoli, int numero_veicoli)
 			controllo = strcmp(tmp_veicolo.codice_veicolo, array_veicoli[i].codice_veicolo);
 			steps++;
 						
-			if(controllo == 1)
+			if(controllo > 1)
 			{
 				steps++;
 				tmp_veicolo = array_veicoli[i];
