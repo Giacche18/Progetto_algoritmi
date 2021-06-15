@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	int posizione_valore_ricercato,
 	    numero_veicoli_inseriti,
 	    numero_veicoli,
-            posizione_centrale_array;
+        posizione_centrale_array;
 		
 	veicolo *array_veicoli = NULL;
 	veicolo valore_massimo;
@@ -66,6 +66,11 @@ int main(int argc, char *argv[])
 			
 		posizione_valore_ricercato = Ricerca_veicolo(array_veicoli, numero_veicoli, posizione_centrale_array);
 		
+		if(posizione_valore_ricercato == -1)
+		{
+			printf("\nVeicolo non trovato in memoria\n");
+		} 
+	
 		Rimozione_veicolo(array_veicoli, &numero_veicoli, posizione_centrale_array);
 		
 		valore_minimo = Ricerca_valore_minimo(array_veicoli, numero_veicoli);
@@ -82,72 +87,122 @@ veicolo* Leggi_su_File(char* nome_file, int* numero_veicoli)
 {
 	veicolo tmp_veicolo;
 	veicolo *array_veicoli;
-		
-	FILE *file;
-	int count = 0;
 	
+	char* valore_ritorno_fgets;
+
+	FILE *file;
+	int count = 0,
+	    valore_controllo_scanf = 0,
+	    valore_controllo_fscanf = 0;	
 	do
 	{
 		printf("Digita il nome del file (con estensione) da cui estrappolare i dati: ");
-		scanf("%s", nome_file);
-		
-		file = fopen(nome_file,
-					 "r"); 
-					 
-		if(file != NULL)
-		{	
-			while (fgetc(file) != '\n');
-				
-	 		while(!feof(file))
-			{
-				fscanf(file,
-					   "%s%s\t",
-					   tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);
-				
-				fgets(tmp_veicolo.nome_veicolo,
-					  21,
-				      file);	  
-					  
-				fscanf(file,
-					   "%d\n",
-					   &tmp_veicolo.anno_immatricolazione);
-					    
-				count++;
-			}
-			
-			rewind(file);
-					
-			array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
-			
-			count = 0;
-			
-			while (fgetc(file) != '\n');
-			
-			while(!feof(file))
-			{
-				fscanf(file,
-					   "%s%s\t",
-					   array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
-				
-				fgets(array_veicoli[count].nome_veicolo,
-					  21,
-				      file);	  
-					  
-				fscanf(file,
-					   "%d\n",
-					   &array_veicoli[count].anno_immatricolazione);
-					   
-				count++;
-			} 			
-			
-			fclose(file);
-			
-			*numero_veicoli = count;
+		valore_controllo_scanf = scanf("%s", nome_file);
+	       
+		if(valore_controllo_scanf == 0)
+		{
+			printf("\nErrore!\n");
 		}
 		else
 		{
-			printf("\nErrore in apertura del file! Riprova!\n\n");
-		}
+
+			file = fopen(nome_file,
+				         "r"); 
+						 
+			if(file != NULL)
+			{	
+				while (fgetc(file) != '\n');
+					
+	 			while(!feof(file))
+				{
+					valore_controllo_fscanf = fscanf(file,
+			   		 			         		     "%s%s\t",
+			  		  		  					     tmp_veicolo.codice_veicolo, tmp_veicolo.codice_proprietario);	
+			  		if(valore_controllo_fscanf == 0)
+			  		{
+			  			printf("\nErrore!\n");
+					}
+					else
+					{
+						valore_ritorno_fgets = fgets(tmp_veicolo.nome_veicolo,
+					     			     		 21,
+				    	     			     	 file);	  
+						if(valore_ritorno_fgets == NULL)
+						{
+							printf("\nErrore!!\n");
+						}
+						else
+						{
+							valore_controllo_fscanf = fscanf(file,
+						           					  "%d\n",
+					   	   	       					  &tmp_veicolo.anno_immatricolazione);
+					   	   	
+					   	   	if(valore_controllo_fscanf == 0)
+					   	   	{
+					   	   		printf("\nErrore!!\n");
+							}
+					    	else
+					    	{
+					    		count++;
+							}			
+						}
+					}	
+				}
+				
+				rewind(file);
+					
+				array_veicoli = (veicolo*) malloc(sizeof(veicolo) * count);	
+			
+				count = 0;
+			
+				while (fgetc(file) != '\n');
+							
+				while(!feof(file))
+				{
+					valore_controllo_fscanf = fscanf(file,
+		  			       					  		 "%s%s\t",
+					       							 array_veicoli[count].codice_veicolo, array_veicoli[count].codice_proprietario);
+					
+					if(valore_controllo_fscanf == 0)
+			  		{
+			  			printf("\nErrore!\n");
+					}
+					else
+					{
+						valore_ritorno_fgets = fgets(array_veicoli[count].nome_veicolo,
+				            	 				 	 21,
+				             				     	 file);
+				      		
+						if(valore_ritorno_fgets == NULL)
+						{
+							printf("\nErrore!!\n");
+						}
+						else
+						{
+							valore_controllo_fscanf = fscanf(file,
+					      	   	   					  "%d\n",
+					     	       					  &array_veicoli[count].anno_immatricolazione);
+					     	
+					     	if(valore_controllo_fscanf == 0)
+					     	{
+					     		printf("\nErrore!!\n");
+							}
+							else
+							{
+								count++;	
+							}				
+						}			
+					}
+				}
+				fclose(file);
+			
+				*numero_veicoli = count;
+			}
+			else
+			{
+				printf("\nErrore in apertura del file! Riprova!\n\n");
+			}
+		}	
 	}while(file == NULL);
 	
 	return(array_veicoli);
@@ -224,9 +279,9 @@ veicolo Recupero_dati_veicolo(int* steps)
 {
 	veicolo nuovo_veicolo;
 	char tmp_string[7];
-	int anno_immatricolazione;
-	int lunghezza_stringa = 0;
-	int i,
+	int anno_immatricolazione,
+	    lunghezza_stringa = 0,
+	    i,
 		j;
 		
 	char nomi_veicoli[10][20] = {"Fiat Panda",
@@ -276,7 +331,7 @@ veicolo Recupero_dati_veicolo(int* steps)
 	strcpy(nuovo_veicolo.codice_proprietario, tmp_string);
 	(*steps)++;
 	
-	j = rand()%10;
+	j = (rand()%10) + 1;
 	(*steps)++;
 		
 	lunghezza_stringa = strlen(nomi_veicoli[j]);
@@ -333,12 +388,6 @@ int Ricerca_veicolo(veicolo *array_veicoli, int numero_veicoli, int posizione_ce
 			steps++;
 		}
 	}
-	
-	if(posizione_valore == -1)
-	{
-		steps++;
-		printf("\nVeicolo non trovato in memoria\n");
-	} 
 	
 	printf("\nL'algoritmo ha impiegato %d passi per ricercare il veicolo centrale tra %d veicoli\n", steps, numero_veicoli);
 	
