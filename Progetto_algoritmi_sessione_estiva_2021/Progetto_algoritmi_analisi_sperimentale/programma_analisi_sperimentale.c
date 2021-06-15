@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
 	int posizione_valore_ricercato,
 	    numero_veicoli_inseriti,
 	    numero_veicoli,
-        posizione_centrale_array;
+            posizione_centrale_array,
+	    valore_controllo_scanf = 0;
 		
 	veicolo *array_veicoli = NULL;
 	veicolo valore_massimo;
@@ -50,11 +51,11 @@ int main(int argc, char *argv[])
 	Stampa_array(array_veicoli, numero_veicoli);
 	
 	printf("\nQuanti veicoli vuoi inserire? ");
-	scanf("%d", &numero_veicoli_inseriti);
+	valore_controllo_scanf = scanf("%d", &numero_veicoli_inseriti);
 	
 	LiberaBuffer();
 	
-	if(numero_veicoli_inseriti <= 0)
+	if(numero_veicoli_inseriti <= 0 || valore_controllo_scanf == 0)
 	{
 		printf("\n\nErrore! Il numero di veicoli deve corrispondere ad un valore positivo e diverso da 0!\n\n");
 	}
@@ -331,7 +332,7 @@ veicolo Recupero_dati_veicolo(int* steps)
 	strcpy(nuovo_veicolo.codice_proprietario, tmp_string);
 	(*steps)++;
 	
-	j = (rand()%10) + 1;
+	j = rand()%10;
 	(*steps)++;
 		
 	lunghezza_stringa = strlen(nomi_veicoli[j]);
