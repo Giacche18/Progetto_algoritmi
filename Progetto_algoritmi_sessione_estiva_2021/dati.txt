@@ -2,3 +2,4 @@ Veicolo	Proprietario	Modello             	Anno
 HFAZ09	COR310			Ford Fiesta         	1949
 TRYU78	TRE789			Renault Clio        	2008
 RTEY56	QWE546			Fiat Spider         	1999
+ZZZZ99	ZZZ999			Renault Clio        	2020

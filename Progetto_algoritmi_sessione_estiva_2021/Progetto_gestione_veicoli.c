@@ -91,8 +91,9 @@ int main(int argc, char *argv[])
 				{
 					array_veicoli = Inserisci_veicolo(array_veicoli, &numero_veicoli, numero_veicoli_inseriti);
 					
+					LiberaBuffer();
+					
 					printf("\nElenco dei veicoli aggiornato come segue...\n\n");
-
 					
 					Stampa_array(array_veicoli, numero_veicoli);
 					Scrivi_su_file(array_veicoli, numero_veicoli, nome_file);
@@ -452,6 +453,8 @@ veicolo Recupero_dati_veicolo()
 		printf("Inserisci il nome del modello (massimo 20 caratteri)...\n");
 		valore_ritorno_fgets = fgets(tmp_string_nome_veicolo, 20, stdin);  
 		
+//		LiberaBuffer();
+		
 		if(valore_controllo == 0)
 		{
 			valore_controllo = 1;			
@@ -484,8 +487,6 @@ veicolo Recupero_dati_veicolo()
 	}while(valore_controllo == 0);
 	
 	strcpy(nuovo_veicolo.nome_veicolo, tmp_string_nome_veicolo);
-	
-	LiberaBuffer();
 	
 	return(nuovo_veicolo);
 }
