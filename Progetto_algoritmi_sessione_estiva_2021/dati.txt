@@ -1,5 +1,6 @@
 Veicolo	Proprietario	Modello             	Anno
 ABCD12	ABC123			Dacia Duster        	2020
 GHFY78	NMB654			Fiat Uno            	1990
-TYRU23	LKJ564			Operl Zafira        	2010
 MJKH98	POI456			Renault Clio        	2005
+ZZZZ99	ZZZ999			Opel Zafira         	2010
+FGHD88	YUT123			Dacia Duster        	2020
