@@ -38,11 +38,11 @@ Si scriva un programma ANSI C che esegue le seguenti elaborazioni:
    rappresentante il veicolo (AAAB12 e ZZYQ48, rispettivamente, nell’esempio riportato).
    
 Per quanto riguarda l’analisi teorica si deve fornire la complessità:
-• dell’algoritmo di ricerca
-• dell’algoritmo di inserimento
-• dell’algoritmo di rimozione
-• dell’algoritmo di calcolo del valore più grande
-• dell’algoritmo di calcolo del valore più piccolo
+1. dell’algoritmo di ricerca
+2. dell’algoritmo di inserimento
+3. dell’algoritmo di rimozione
+4. dell’algoritmo di calcolo del valore più grande
+5. dell’algoritmo di calcolo del valore più piccolo
 
 Oltre all’analisi teorica della complessità si deve effettuare uno studio sperimentale della stessa per le operazioni
 sopra specificate (ricerca, inserimento, rimozione, calcolo del massimo, calcolo del minimo). Come suggerimento
