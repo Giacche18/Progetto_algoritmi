@@ -22,9 +22,6 @@ Ad esempio:
 
 Veicolo Proprietario Modello  Anno
 ZZYQ48  FCA001       Fiat 850 1973
-CCGH07  DEF130       Fiat 500 1971
-AAAB12  ABC001       Ford T   1908
-...     ...          ...      ...
 
 Si scriva un programma ANSI C che esegue le seguenti elaborazioni:
 1. Acquisisce il file e memorizza le relative informazioni in una struttura dati di tipo dinamico.
