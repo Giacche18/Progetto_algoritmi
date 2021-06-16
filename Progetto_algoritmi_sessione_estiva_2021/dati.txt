@@ -1,5 +1,5 @@
 Veicolo	Proprietario	Modello             	Anno
-HFAZ09	COR310			Ford Fiesta         	1949
-TRYU78	TRE789			Renault Clio        	2008
-RTEY56	QWE546			Fiat Spider         	1999
-ZZZZ99	ZZZ999			Renault Clio        	2020
+ABCD12	ABC123			Dacia Duster        	2020
+GHFY78	NMB654			Fiat Uno            	1990
+TYRU23	LKJ564			Operl Zafira        	2010
+MJKH98	POI456			Renault Clio        	2005
