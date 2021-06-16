@@ -453,7 +453,7 @@ veicolo Recupero_dati_veicolo(int* steps)
 	(*steps)++;
 	
 	/* creo in maniera pseudo-casuale un valore compreso tra 0 e 10 e che mi rappresentera' un veicolo di quelli elencati sopra */
-	j = rand()%11;
+	j = rand()%10;
 	(*steps)++;
 	
 	/* verifico la lunghezzza della stringa */	
